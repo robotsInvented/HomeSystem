@@ -1,6 +1,6 @@
 # homeSystem
-
-# homeSecurity
-# homeLight
-# homeRemote
-# homeButler
+#
+# - homeSecurity
+# - homeLight
+# - homeRemote
+# - homeButler
