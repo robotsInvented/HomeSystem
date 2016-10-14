@@ -149,7 +149,7 @@ void HomeSystem::homeSecurity::process()
             while (keypressed == NO_KEY);
             Serial.print("Key pressed: ");
             Serial.println(keypressed);
-            If (keypressed == '4')
+            if (keypressed == '4')
             {
               Serial.print("alarm digit 4 entered: ");
               Serial.println(keypressed);   //consider replacing serial.print with Debug.Print(String string)
@@ -160,7 +160,7 @@ void HomeSystem::homeSecurity::process()
               while (keypressed == NO_KEY);
               Serial.print("Key pressed: ");
               Serial.println(keypressed);
-              If (keypressed == '*')
+              if (keypressed == '*')
               {
                 Serial.print("pin code entering terminated: armed=");
                 Serial.println(getIsArmed());
