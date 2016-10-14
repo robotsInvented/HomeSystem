@@ -97,56 +97,92 @@ void HomeSystem::homeSecurity::initialize()
 void HomeSystem::homeSecurity::process()
 {
   
-//If key is pressed, this key is stored in 'keypressed' variable
-//If key is not equal to 'NO_KEY', then this key is printed out
-//if count=17, then count is reset back to 0 (this means no key is pressed during the whole keypad scan process
-
-  char keypressed = myKeypad.getKey();
+  char keypressed = NO_KEY; 
+  myKeypad.getKey(); //If key is pressed, this key is stored in 'keypressed' variable; If key is not pressed, 'keypressed' variable will contain 'NO_KEY'.  
   if (keypressed != NO_KEY)
   {
     tone(13,10150);
     delay(100);
     noTone(13);
-    Serial.print(keypressed);
+    Serial.print("Key pressed: ");
+    Serial.println(keypressed);
     if (keypressed == '*')
     {
+      Serial.println("pin code entering initiated");
       do
       {
         keypressed = myKeypad.getKey();
       }
-      while (keypressed == NO_KEY);
-      Serial.print("alarm digit 1");
+      while (keypressed == NO_KEY);    
+      Serial.print("Key pressed: ");
+      Serial.println(keypressed);
       if (keypressed == '1')
       {
-        tone(13,9150);
-        lcd.clear();
-        lcd.print("Alarm");
-        lcd.setCursor(0,1);
-        lcd.print("armed");
-        lockDoor(MAIN_DOOR);
-        delay(3500);
-        //delay(1000);
-        noTone(13);
-        lcd.clear();
-        lcd.home();
-        lcd.print(getUserName1());
-        lcd.setCursor(0,1);
-        lcd.print(getUserName2());
+        Serial.print("alarm digit 1 entered: ");
+        Serial.println(keypressed);   //consider replacing serial.print with Debug.Print(String string)
+        do
+        {
+          keypressed = myKeypad.getKey();
+        }
+        while (keypressed == NO_KEY);
+        Serial.print("Key pressed: ");
+        Serial.println(keypressed);
+        if (keypressed == '2')
+        {
+          Serial.print("alarm digit 2 entered: ");
+          Serial.println(keypressed);   //consider replacing serial.print with Debug.Print(String string)
+          do
+          {
+            keypressed = myKeypad.getKey();
+          }
+          while (keypressed == NO_KEY);
+          Serial.print("Key pressed: ");
+          Serial.println(keypressed);
+          if (keypressed == '3')
+          {
+            Serial.print("alarm digit 3 entered: ");
+            Serial.println(keypressed);   //consider replacing serial.print with Debug.Print(String string)
+            do
+            {
+              keypressed = myKeypad.getKey();
+            }
+            while (keypressed == NO_KEY);
+            Serial.print("Key pressed: ");
+            Serial.println(keypressed);
+            If (keypressed == '4')
+            {
+              Serial.print("alarm digit 4 entered: ");
+              Serial.println(keypressed);   //consider replacing serial.print with Debug.Print(String string)
+              do
+              {
+                keypressed = myKeypad.getKey();
+              }
+              while (keypressed == NO_KEY);
+              Serial.print("Key pressed: ");
+              Serial.println(keypressed);
+              If (keypressed == '*')
+              {
+                Serial.print("pin code entering terminated: armed=");
+                Serial.println(getIsArmed());
+                tone(13,9150);
+                Lcd.clear();
+                Lcd.print("Alarm");
+                Lcd.setCursor(0,1);
+                Lcd.print("armed");
+                lockDoor(MAIN_DOOR);
+                delay(3500);
+                noTone(13);
+                Lcd.clear();
+                Lcd.home();
+                Lcd.print(getUserName1());
+                Lcd.setCursor(0,1);
+                Lcd.print(getUserName2());
+              }
+            }
+          }
+        }
       }
     } 
-  }
-  
-  while(Serial.available())
-  {//while there is data available on the serial monitor
-    message+=char(Serial.read());//store string from serial command
-  }
-  if(!Serial.available())
-  {
-    if(message!="")
-    {//if data is available
-      Serial.println(message); //show the data
-      message=""; //clear the data
-    }
   }
   delay(100);
 }
