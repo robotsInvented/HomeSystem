@@ -1,5 +1,5 @@
 /*
-  HomeSystem.cpp - Library for flashing Morse code.
+  HomeSystem.cpp - Library for RobotsInvented's HomeSystem Open-Source Embedded System Development Platform.
   Created by RobotsInvented, March 17, 2016.
   Released into the public domain.
 */
@@ -11,7 +11,7 @@
 //Voltage Vcc to V0 - 4.15V
 //Voltage V0 to Gnd - 0.92V
 
-LiquidCrystal Lcd(7,8,9,10,11,12);
+LiquidCrystal lcd(7,8,9,10,11,12);
 
 const byte numRows= 4; //number of rows on the keypad
 const byte numCols= 4; //number of columns on the keypad
@@ -50,7 +50,7 @@ void HomeSystem::initialize()
   pinMode(4, INPUT);
   pinMode(4, OUTPUT);
   digitalWrite(4, HIGH); //deactivate relay
-  //Lcd.print(userName);
+  //LCD.print(userName);
   //Delay(3000);
   //blink led
   //play buzzer
@@ -63,7 +63,7 @@ HomeSystem::homeSecurity::homeSecurity()
 
 void HomeSystem::homeSecurity::initialize()
 {
-  Lcd.begin(16,2);
+  lcd.begin(16,2);
   tone(13,90);
   delay(95);
   noTone(13);
@@ -71,118 +71,82 @@ void HomeSystem::homeSecurity::initialize()
   tone(13,15150);
   delay(100);
   noTone(13);
-  Lcd.home();
-  Lcd.print("homeSecurity");
+  lcd.home();
+  lcd.print("homeSecurity");
   delay(750);
-  Lcd.clear();
-  Lcd.print("homeSecurity.rob");
+  lcd.clear();
+  lcd.print("homeSecurity.rob");
   Serial.println("homeSecurity.rob");
-  Lcd.setCursor(0,1);
-  Lcd.print("otsInvented");
+  lcd.setCursor(0,1);
+  lcd.print("otsInvented");
   delay(750);
-  Lcd.clear();
-  Lcd.print("homeSecurity.rob");
-  Lcd.setCursor(0,1);
-  Lcd.print("otsInvented.asia");
+  lcd.clear();
+  lcd.print("homeSecurity.rob");
+  lcd.setCursor(0,1);
+  lcd.print("otsInvented.asia");
   delay(3500);
-  Lcd.clear();
-  Lcd.home();
-  Lcd.print(getUserName1());
-  Lcd.setCursor(0,1);
-  Lcd.print(getUserName2());
-  //Lcd.clear();
+  lcd.clear();
+  lcd.home();
+  lcd.print(getUserName1());
+  lcd.setCursor(0,1);
+  lcd.print(getUserName2());
+  //lcd.clear();
   unlockDoor(MAIN_DOOR);
 }
 
 void HomeSystem::homeSecurity::process()
 {
   
-  char keypressed = NO_KEY; 
-  myKeypad.getKey(); //If key is pressed, this key is stored in 'keypressed' variable; If key is not pressed, 'keypressed' variable will contain 'NO_KEY'.  
+//If key is pressed, this key is stored in 'keypressed' variable
+//If key is not equal to 'NO_KEY', then this key is printed out
+//if count=17, then count is reset back to 0 (this means no key is pressed during the whole keypad scan process
+
+  char keypressed = myKeypad.getKey();
   if (keypressed != NO_KEY)
   {
     tone(13,10150);
     delay(100);
     noTone(13);
-    Serial.print("Key pressed: ");
-    Serial.println(keypressed);
+    Serial.print(keypressed);
     if (keypressed == '*')
     {
-      Serial.println("pin code entering initiated");
       do
       {
         keypressed = myKeypad.getKey();
       }
-      while (keypressed == NO_KEY);    
-      Serial.print("Key pressed: ");
-      Serial.println(keypressed);
+      while (keypressed == NO_KEY);
+      Serial.print("alarm digit 1");
       if (keypressed == '1')
       {
-        Serial.print("alarm digit 1 entered: ");
-        Serial.println(keypressed);   //consider replacing serial.print with Debug.Print(String string)
-        do
-        {
-          keypressed = myKeypad.getKey();
-        }
-        while (keypressed == NO_KEY);
-        Serial.print("Key pressed: ");
-        Serial.println(keypressed);
-        if (keypressed == '2')
-        {
-          Serial.print("alarm digit 2 entered: ");
-          Serial.println(keypressed);   //consider replacing serial.print with Debug.Print(String string)
-          do
-          {
-            keypressed = myKeypad.getKey();
-          }
-          while (keypressed == NO_KEY);
-          Serial.print("Key pressed: ");
-          Serial.println(keypressed);
-          if (keypressed == '3')
-          {
-            Serial.print("alarm digit 3 entered: ");
-            Serial.println(keypressed);   //consider replacing serial.print with Debug.Print(String string)
-            do
-            {
-              keypressed = myKeypad.getKey();
-            }
-            while (keypressed == NO_KEY);
-            Serial.print("Key pressed: ");
-            Serial.println(keypressed);
-            if (keypressed == '4')
-            {
-              Serial.print("alarm digit 4 entered: ");
-              Serial.println(keypressed);   //consider replacing serial.print with Debug.Print(String string)
-              do
-              {
-                keypressed = myKeypad.getKey();
-              }
-              while (keypressed == NO_KEY);
-              Serial.print("Key pressed: ");
-              Serial.println(keypressed);
-              if (keypressed == '*')
-              {
-                Serial.print("pin code entering terminated: armed=");
-                Serial.println(getIsArmed());
-                tone(13,9150);
-                Lcd.clear();
-                Lcd.print("Alarm");
-                Lcd.setCursor(0,1);
-                Lcd.print("armed");
-                lockDoor(MAIN_DOOR);
-                delay(3500);
-                noTone(13);
-                Lcd.clear();
-                Lcd.home();
-                Lcd.print(getUserName1());
-                Lcd.setCursor(0,1);
-                Lcd.print(getUserName2());
-              }
-            }
-          }
-        }
+        tone(13,9150);
+        lcd.clear();
+        lcd.print("Alarm");
+        lcd.setCursor(0,1);
+        lcd.print("armed");
+        lockDoor(MAIN_DOOR);
+        delay(3500);
+        //delay(1000);
+        noTone(13);
+        lcd.clear();
+        lcd.home();
+        lcd.print(getUserName1());
+        lcd.setCursor(0,1);
+        lcd.print(getUserName2());
       }
     } 
+  }
+  
+  while(Serial.available())
+  {//while there is data available on the serial monitor
+    message+=char(Serial.read());//store string from serial command
+  }
+  if(!Serial.available())
+  {
+    if(message!="")
+    {//if data is available
+      Serial.println(message); //show the data
+      message=""; //clear the data
+    }
   }
   delay(100);
 }
@@ -239,4 +203,5 @@ void HomeSystem::homeLight::switchOff(int light)
 {
   
 }
+
 
