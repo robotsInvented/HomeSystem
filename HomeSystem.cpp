@@ -11,7 +11,7 @@
 //Voltage Vcc to V0 - 4.15V
 //Voltage V0 to Gnd - 0.92V
 
-LiquidCrystal lcd(7,8,9,10,11,12);
+LiquidCrystal Lcd(7,8,9,10,11,12);
 
 const byte numRows= 4; //number of rows on the keypad
 const byte numCols= 4; //number of columns on the keypad
@@ -50,7 +50,7 @@ void HomeSystem::initialize()
   pinMode(4, INPUT);
   pinMode(4, OUTPUT);
   digitalWrite(4, HIGH); //deactivate relay
-  //LCD.print(userName);
+  //Lcd.print(userName);
   //Delay(3000);
   //blink led
   //play buzzer
@@ -63,7 +63,7 @@ HomeSystem::homeSecurity::homeSecurity()
 
 void HomeSystem::homeSecurity::initialize()
 {
-  lcd.begin(16,2);
+  Lcd.begin(16,2);
   tone(13,90);
   delay(95);
   noTone(13);
@@ -71,26 +71,26 @@ void HomeSystem::homeSecurity::initialize()
   tone(13,15150);
   delay(100);
   noTone(13);
-  lcd.home();
-  lcd.print("homeSecurity");
+  Lcd.home();
+  Lcd.print("homeSecurity");
   delay(750);
-  lcd.clear();
-  lcd.print("homeSecurity.rob");
+  Lcd.clear();
+  Lcd.print("homeSecurity.rob");
   Serial.println("homeSecurity.rob");
-  lcd.setCursor(0,1);
-  lcd.print("otsInvented");
+  Lcd.setCursor(0,1);
+  Lcd.print("otsInvented");
   delay(750);
-  lcd.clear();
-  lcd.print("homeSecurity.rob");
-  lcd.setCursor(0,1);
-  lcd.print("otsInvented.asia");
+  Lcd.clear();
+  Lcd.print("homeSecurity.rob");
+  Lcd.setCursor(0,1);
+  Lcd.print("otsInvented.asia");
   delay(3500);
-  lcd.clear();
-  lcd.home();
-  lcd.print(getUserName1());
-  lcd.setCursor(0,1);
-  lcd.print(getUserName2());
-  //lcd.clear();
+  Lcd.clear();
+  Lcd.home();
+  Lcd.print(getUserName1());
+  Lcd.setCursor(0,1);
+  Lcd.print(getUserName2());
+  //Lcd.clear();
   unlockDoor(MAIN_DOOR);
 }
 
